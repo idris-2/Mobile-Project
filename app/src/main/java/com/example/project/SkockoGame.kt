@@ -96,7 +96,11 @@ fun SkockoGame(navController: NavController) {
                                     if (currentGuessIndex == rowIndex) {
                                         guesses = guesses.toMutableList().apply {
                                             this[rowIndex] = guess.toMutableList().apply {
-                                                this[colIndex] = symbols.random()
+                                                if (this[colIndex].isNotEmpty()) {
+                                                    this[colIndex] = ""
+                                                } else {
+                                                    this[colIndex] = symbols.random()
+                                                }
                                             }
                                         }
                                     }
