@@ -4,27 +4,34 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlin.math.abs
 import kotlin.random.Random
 
 
 @Composable
-fun MojBrojGame() {
+fun MojBrojGame(navController: NavController) {
     var resultText by remember { mutableStateOf("") }
     val numbers = remember { generateNumbers() }
     val targetNumber = remember { generateTargetNumber() }
     var usedNumbers by remember { mutableStateOf(List(numbers.size) { false }) }
     var points by remember { mutableStateOf(0) }
     var message by remember { mutableStateOf("") }
+    var gameFinished by remember { mutableStateOf(false) }
+    var gameWon by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -104,21 +111,28 @@ fun MojBrojGame() {
                         else -> 0
                     }
                     message = when {
-                        difference == 0 -> "You won and got 30 points!"
-                        difference <= 5 -> "You got 20 points!"
-                        difference <= 10 -> "You got 5 points!"
-                        else -> "You got 0 points."
+                        difference == 0 -> "30"
+                        difference <= 5 -> "20"
+                        difference <= 10 -> "5"
+                        else -> "0"
                     }
+                    gameFinished = true
+                    gameWon = difference <= 10
                 } catch (e: Exception) {
                     message = "Invalid expression."
+                    gameFinished = true
+                    gameWon = false
                 }
             },
-            modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.CenterHorizontally)
+            modifier = Modifier.padding(4.dp).align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "Submit", fontSize = 24.sp)
+            Text("Submit")
         }
+
+        if (gameFinished) {
+            EndGameDialogMojBroj(navController, gameWon, message)
+        }
+
 
         // Clear button
         Button(
@@ -128,9 +142,7 @@ fun MojBrojGame() {
                 points = 0
                 message = ""
             },
-            modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.CenterHorizontally)
+            modifier = Modifier.padding(4.dp).align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Clear", fontSize = 24.sp)
         }
@@ -140,7 +152,22 @@ fun MojBrojGame() {
             Text(text = message, fontSize = 24.sp, color = Color.Blue)
         }
     }
+    }
+
+@Composable
+fun EndGameDialogMojBroj(navController: NavController, gameWon: Boolean, text: String) {
+    AlertDialog(
+        onDismissRequest = { navController.navigate("main") },
+        title = { Text(text = if (gameWon) "Congratulations!" else "You Failed") },
+        text = { Text(text = if (gameWon) "Good job, you've got $text points!" else "You've got $text points!") },
+        confirmButton = {
+            Button(onClick = { navController.navigate("main") }) {
+                Text("OK")
+            }
+        }
+    )
 }
+
 
 fun generateNumbers(): List<Int> {
     val firstFourNumbers = List(4) { Random.nextInt(1, 10) }
@@ -154,45 +181,49 @@ fun generateTargetNumber(): Int {
 }
 
 fun evaluateExpression(expression: String): Int {
-    val tokens = expression.split(" ")
-    val values = mutableListOf<Int>()
-    val ops = mutableListOf<Char>()
+    return try {
+        expression.toInt()
+    } catch (e: Exception) {
+        val tokens = expression.split(" ")
+        val values = mutableListOf<Int>()
+        val ops = mutableListOf<Char>()
 
-    var i = 0
-    while (i < tokens.size) {
-        val token = tokens[i]
-        if (token.isNumber()) {
-            values.add(token.toInt())
-        } else if (token.isOperator()) {
-            while (ops.isNotEmpty() && precedence(token[0]) <= precedence(ops.last())) {
-                val val2 = values.removeLast()
-                val val1 = values.removeLast()
-                val op = ops.removeLast()
-                values.add(applyOp(op, val1, val2))
+        var i = 0
+        while (i < tokens.size) {
+            val token = tokens[i]
+            if (token.isNumber()) {
+                values.add(token.toInt())
+            } else if (token.isOperator()) {
+                while (ops.isNotEmpty() && precedence(token[0]) <= precedence(ops.last())) {
+                    val val2 = values.removeLast()
+                    val val1 = values.removeLast()
+                    val op = ops.removeLast()
+                    values.add(applyOp(op, val1, val2))
+                }
+                ops.add(token[0])
+            } else if (token == "(") {
+                ops.add('(')
+            } else if (token == ")") {
+                while (ops.last() != '(') {
+                    val val2 = values.removeLast()
+                    val val1 = values.removeLast()
+                    val op = ops.removeLast()
+                    values.add(applyOp(op, val1, val2))
+                }
+                ops.removeLast()
             }
-            ops.add(token[0])
-        } else if (token == "(") {
-            ops.add('(')
-        } else if (token == ")") {
-            while (ops.last() != '(') {
-                val val2 = values.removeLast()
-                val val1 = values.removeLast()
-                val op = ops.removeLast()
-                values.add(applyOp(op, val1, val2))
-            }
-            ops.removeLast()
+            i++
         }
-        i++
-    }
 
-    while (ops.isNotEmpty()) {
-        val val2 = values.removeLast()
-        val val1 = values.removeLast()
-        val op = ops.removeLast()
-        values.add(applyOp(op, val1, val2))
-    }
+        while (ops.isNotEmpty()) {
+            val val2 = values.removeLast()
+            val val1 = values.removeLast()
+            val op = ops.removeLast()
+            values.add(applyOp(op, val1, val2))
+        }
 
-    return values.last()
+        values.last()
+    }
 }
 
 fun String.isNumber() = this.toIntOrNull() != null
@@ -215,5 +246,10 @@ fun applyOp(op: Char, a: Int, b: Int): Int {
         '/' -> a / b
         else -> throw UnsupportedOperationException("Unknown operator: $op")
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MojBrojGame(navController = rememberNavController())
 }
 

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "main") {
                     composable("main") { MainScreen(navController) }
                     composable("slagalica") { SlagalicaGame() }
-                    composable("mojbroj") { MojBrojGame() }
+                    composable("mojbroj") { MojBrojGame(navController) }
                     composable("spojnice") { SpojniceGame() }
                     composable("skocko") { SkockoGame(navController) }
                     composable("koznazna") { KoZnaZnaGame() }
