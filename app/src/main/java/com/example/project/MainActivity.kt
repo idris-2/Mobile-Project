@@ -3,9 +3,13 @@ package com.example.project
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     composable("slagalica") { SlagalicaGame() }
                     composable("mojbroj") { MojBrojGame() }
                     composable("spojnice") { SpojniceGame() }
-                    composable("skocko") { SkockoGame() }
+                    composable("skocko") { SkockoGame(navController) }
                     composable("koznazna") { KoZnaZnaGame() }
                 }
             }

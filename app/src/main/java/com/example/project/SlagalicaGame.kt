@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SlagalicaGame() {
@@ -17,7 +18,20 @@ fun SlagalicaGame() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Implement Slagalica game UI and logic here
         Text(text = "Slagalica Game")
+        // Add your game components here (buttons, input fields, etc.)
+        // For now, let's display a placeholder button:
+        Button(
+            onClick = { /* Handle button click */ },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "Play Slagalica")
+        }
     }
+}
+
+@Preview
+@Composable
+fun PreviewSlagalicaGame() {
+    SlagalicaGame()
 }
