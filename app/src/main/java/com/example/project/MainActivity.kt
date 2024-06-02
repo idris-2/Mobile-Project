@@ -3,18 +3,26 @@ package com.example.project
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+<<<<<<< HEAD
 import androidx.activity.viewModels
+=======
+import androidx.compose.foundation.Image
+>>>>>>> 1794df2a5d04378e53bf56443f74edc6fa5e1286
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -23,10 +31,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+<<<<<<< HEAD
 import androidx.room.Room
 import com.example.project.model.AppDatabase
 import com.example.project.model.models.KoZna
 import com.example.project.model.models.Leaderboard
+=======
+import com.example.project.KoZnaZnaGame
+import com.example.project.MojBrojGame
+import com.example.project.SkockoGame
+import com.example.project.SlagalicaGame
+import com.example.project.SpojniceGame
+>>>>>>> 1794df2a5d04378e53bf56443f74edc6fa5e1286
 import com.example.project.ui.theme.ProjectTheme
 import com.example.project.viewmodel.FieldsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +97,7 @@ class MainActivity : ComponentActivity() {
                     composable("mojbroj") { MojBrojGame(navController) }
                     composable("spojnice") { SpojniceGame() }
                     composable("skocko") { SkockoGame(navController) }
-                    composable("koznazna") { KoZnaZnaGame() }
+                    composable("koznazna") { KoZnaZnaGame(navController) }
                 }
             }
         }
@@ -93,10 +109,18 @@ fun MainScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.feningashlogo),
+            contentDescription = "Logo",
+            modifier = Modifier
+                .size(200.dp)
+                .clip(RoundedCornerShape(100.dp))
+        )
+        Spacer(modifier = Modifier.height(64.dp))
         Button(onClick = { navController.navigate("slagalica") }) {
             Text("Slagalica")
         }
