@@ -2,16 +2,7 @@ package com.example.project
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomAppBar
@@ -27,8 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 val symbols = listOf("♠", "♥", "♦", "♣", "★", "☻")
 
@@ -50,9 +44,10 @@ fun SkockoGame(navController: NavController) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     symbols.forEach { symbol ->
+                        val symbolColor = if (symbol == "★" || symbol == "☻") Color.Yellow else Color.Yellow
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(60.dp)  // Increased size
                                 .background(Color.LightGray)
                                 .padding(8.dp)
                                 .clickable {
@@ -67,7 +62,18 @@ fun SkockoGame(navController: NavController) {
                                 },
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = symbol)
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp) // Adjust circle size here
+                                    .background(Color.White, CircleShape) // Use the bigger circle as background
+                            ) {
+                                Text(
+                                    text = symbol,
+                                    color = symbolColor,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.align(Alignment.Center) // Center the symbol in the circle
+                                )
+                            }
                         }
                     }
                 }
@@ -89,7 +95,7 @@ fun SkockoGame(navController: NavController) {
                     guess.forEachIndexed { colIndex, symbol ->
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(60.dp)  // Increased size
                                 .background(Color.LightGray)
                                 .padding(8.dp)
                                 .clickable {
@@ -107,24 +113,41 @@ fun SkockoGame(navController: NavController) {
                                 },
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = symbol)
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp) // Adjust circle size here
+                                    .background(Color.White, CircleShape) // Use the bigger circle as background
+                            ) {
+                                Text(
+                                    text = symbol,
+                                    color = Color.Black,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.align(Alignment.Center) // Center the symbol in the circle
+                                )
+                            }
                         }
                     }
 
-                    feedback[rowIndex].forEach { indicator ->
-                        Box(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .background(
-                                    color = when (indicator) {
-                                        "red" -> Color.Red
-                                        "yellow" -> Color.Yellow
-                                        else -> Color.Gray
-                                    },
-                                    shape = CircleShape
-                                )
-                                .padding(4.dp)
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(4.dp)
+                    ) {
+                        feedback[rowIndex].forEach { indicator ->
+                            val indicatorSize = 32.dp  // Increased size for empty circles
+                            Box(
+                                modifier = Modifier
+                                    .size(indicatorSize)
+                                    .background(
+                                        color = when (indicator) {
+                                            "red" -> Color.Red
+                                            "yellow" -> Color.Yellow
+                                            else -> Color.Gray
+                                        },
+                                        shape = CircleShape
+                                    )
+                                    .padding(4.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -135,6 +158,7 @@ fun SkockoGame(navController: NavController) {
                 modifier = Modifier
                     .background(Color.Blue)
                     .padding(8.dp)
+                    .size(width = 130.dp, height = 50.dp)
                     .clickable {
                         if (!guesses[currentGuessIndex].contains("")) {
                             val currentGuess = guesses[currentGuessIndex]
@@ -195,4 +219,10 @@ fun EndGameDialog(navController: NavController, gameWon: Boolean) {
             }
         }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview2() {
+    SkockoGame(navController = rememberNavController())
 }
