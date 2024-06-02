@@ -3,11 +3,8 @@ package com.example.project
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-<<<<<<< HEAD
 import androidx.activity.viewModels
-=======
 import androidx.compose.foundation.Image
->>>>>>> 1794df2a5d04378e53bf56443f74edc6fa5e1286
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,18 +28,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-<<<<<<< HEAD
 import androidx.room.Room
 import com.example.project.model.AppDatabase
 import com.example.project.model.models.KoZna
 import com.example.project.model.models.Leaderboard
-=======
-import com.example.project.KoZnaZnaGame
-import com.example.project.MojBrojGame
-import com.example.project.SkockoGame
-import com.example.project.SlagalicaGame
-import com.example.project.SpojniceGame
->>>>>>> 1794df2a5d04378e53bf56443f74edc6fa5e1286
 import com.example.project.ui.theme.ProjectTheme
 import com.example.project.viewmodel.FieldsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -93,9 +82,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = "main") {
                     composable("main") { MainScreen(navController) }
-                    composable("slagalica") { SlagalicaGame() }
                     composable("mojbroj") { MojBrojGame(navController) }
-                    composable("spojnice") { SpojniceGame() }
                     composable("skocko") { SkockoGame(navController) }
                     composable("koznazna") { KoZnaZnaGame(navController) }
                 }
@@ -120,17 +107,9 @@ fun MainScreen(navController: NavHostController) {
                 .size(200.dp)
                 .clip(RoundedCornerShape(100.dp))
         )
-        Spacer(modifier = Modifier.height(64.dp))
-        Button(onClick = { navController.navigate("slagalica") }) {
-            Text("Slagalica")
-        }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { navController.navigate("mojbroj") }) {
             Text("Moj Broj")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate("spojnice") }) {
-            Text("Spojnice")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { navController.navigate("skocko") }) {
