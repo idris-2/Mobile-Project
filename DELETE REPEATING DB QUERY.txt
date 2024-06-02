@@ -1,0 +1,6 @@
+DELETE FROM koznas
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM koznas
+    GROUP BY question, ans_a, ans_b, ans_c, ans_d, correct
+);
