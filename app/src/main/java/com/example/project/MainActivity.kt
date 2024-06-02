@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     composable("mojbroj") { MojBrojGame(navController) }
                     composable("spojnice") { SpojniceGame() }
                     composable("skocko") { SkockoGame(navController) }
-                    composable("koznazna") { KoZnaZnaGame() }
+                    composable("koznazna") { KoZnaZnaGame(navController) }
                 }
             }
         }
