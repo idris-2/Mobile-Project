@@ -26,9 +26,7 @@ fun KoZnaZnaGame(navController: NavHostController) {
         answered = true
         selectedOption = answer
         coroutineScope.launch {
-            delay(3000) // Wait for 3 seconds
-            // Proceed to the next question or navigate back to the main screen if finished
-            // For simplicity, let's assume we finish after this question
+            delay(3000)
             navController.navigate("main")
         }
     }
@@ -83,7 +81,7 @@ fun KoZnaZnaGame(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuizApp() {
-    // For preview purposes, we'll use a dummy navController. In actual app, it will be provided by the NavHost.
+
     KoZnaZnaGame(navController = rememberNavController())
 }
 
